@@ -1,0 +1,1641 @@
+---
+title: "Applied Probability and Statistics II Projects"
+output:
+  html_document:
+    df_print: paged
+---
+
+# Project 1
+
+## Problem 1
+
+### 1
+dbinom: the binomial distribution of a vector.
+pbinom: the cumulative distribution of a vector.
+barplot: Creates a bar plot with vertical or horizontal bars.
+
+### 2
+#### Plot 1:
+```{r}
+barplot(dbinom(0:10, 5, .1))
+barplot(dbinom(0:10, 10, .1))
+barplot(dbinom(0:10, 20, .1))
+barplot(dbinom(0:10, 30, .1))
+barplot(dbinom(0:10, 50, .1))
+```
+
+#### Plot 2:
+```{r}
+barplot(dbinom(0:25, 5, .6))
+barplot(dbinom(0:25, 10, .6))
+barplot(dbinom(0:25, 15, .6))
+barplot(dbinom(0:25, 30, .6))
+```
+
+#### Plot 3:
+```{r}
+barplot(dbinom(0:50, 5, .9))
+barplot(dbinom(0:50, 10, .9))
+barplot(dbinom(0:50, 20, .9))
+barplot(dbinom(0:50, 30, .9))
+barplot(dbinom(0:50, 50, .9))
+```
+
+### 3
+```{r}
+lambda <- c(2,4,5,10,20,30,50)
+barplot(dpois(0:75,2))
+barplot(dpois(0:75,4))
+barplot(dpois(0:75,5))
+barplot(dpois(0:75,10))
+barplot(dpois(0:75,20))
+barplot(dpois(0:75,30))
+barplot(dpois(0:75,50))
+```
+
+### 4
+The Poisson distribution looks more like a normal distribution at higher lambdas.
+
+## Problem 2
+### 1
+```{r}
+x <- c(2, 4, 6, 10)
+p_x <- c(.3, .35, .25, .1)
+E_x <- 0
+for(i in seq_along(x)){
+  a <- x[i]*p_x[i]
+  E_x <<- E_x + a
+}
+paste0("Expected Value = ", E_x)
+```
+
+### 2
+```{r}
+x <- c(2, 4, 6, 10)
+p_x <- c(.3, .35, .25, .1)
+E_x2 <- 0
+for(i in seq_along(x)){
+  a <- (x[i])^2*p_x[i]
+  E_x2 <<- E_x2 + a
+}
+sigma <- sqrt(E_x2 - (E_x)^2)
+paste0("Standard Deviation = ", sigma)
+
+```
+
+### 3
+```{r}
+#n <- c(2, 6, 12, 20, 100, 150)
+B <- 8000
+sale <- function(){
+ a <- sample(1:100)
+ if(1 <= a && a <= 30){
+   price <<- 2
+}
+ if(31 <= a && a <= 65){
+   price <<- 4
+}
+ if(66 <= a && a <= 90){
+   price <<- 6
+}
+ if(91 <= a && a <= 100){
+   price <<- 10
+ }
+ # print(price)
+}
+
+total_sales <- function(n){
+  total_price <<- 0
+  for(i in 1:n){
+    sale()
+    total_price <<- total_price + price
+  }
+  # print(total_price)
+  ave_sales <- total_price/n
+  return(ave_sales)
+}
+
+n_2 <- replicate(B, total_sales(2))
+paste0("Average Revenue for 2 pens sold = ", mean(n_2))
+
+n_6 <- replicate(B, total_sales(6))
+paste0("Average Revenue for 6 pens sold = ", mean(n_6))
+
+n_12 <- replicate(B, total_sales(12))
+paste0("Average Revenue for 12 pens sold = ", mean(n_12))
+
+n_20 <- replicate(B, total_sales(20))
+paste0("Average Revenue for 20 pens sold = ", mean(n_20))
+
+n_100 <- replicate(B, total_sales(100))
+paste0("Average Revenue for 100 pens sold = ", mean(n_100))
+
+n_150 <- replicate(B, total_sales(150))
+paste0("Average Revenue for 150 pens sold = ", mean(n_150))
+```
+
+### 4
+#### a
+```{r}
+distribution_X_bar <- function(a){
+amount <- rep(0, 10)
+a <- round(a, digits = 0)
+for(i in 1:8000){
+  amount[a[i]] <- amount[a[i]] + 1
+}
+print(amount)
+}
+
+paste0("   1   2    3   4    5     6    7    8     9   10")
+distribution_X_bar(n_2)
+distribution_X_bar(n_6)
+distribution_X_bar(n_12)
+distribution_X_bar(n_20)
+distribution_X_bar(n_100)
+distribution_X_bar(n_150)
+```
+
+#### b
+```{r}
+print(paste0("Expected value for n = 2: ", mean(n_2)))
+print(paste0("Expected value for n = 6: ", mean(n_6)))
+print(paste0("Expected value for n = 12: ", mean(n_12)))
+print(paste0("Expected value for n = 20: ", mean(n_20)))
+print(paste0("Expected value for n = 100: ", mean(n_100)))
+print(paste0("Expected value for n = 150: ", mean(n_150)))
+
+print(paste0("Standard Deviation for n = 2: ", sd(n_2)))
+print(paste0("Standard Deviation for n = 6: ", sd(n_6)))
+print(paste0("Standard Deviation for n = 12: ", sd(n_12)))
+print(paste0("Standard Deviation for n = 20: ", sd(n_20)))
+print(paste0("Standard Deviation for n = 100: ", sd(n_100)))
+print(paste0("Standard Deviation for n = 150: ", sd(n_150)))
+```
+
+#### c
+```{r}
+hist(n_2)
+hist(n_6)
+hist(n_12)
+hist(n_20)
+hist(n_100)
+hist(n_150)
+```
+
+#### d
+```{r}
+n_15_3000 <- replicate(3000, total_sales(15))
+n_25_3000 <- replicate(3000, total_sales(25))
+n_1_3000 <- replicate(3000, total_sales(1))
+n_1_5 <- replicate(5, total_sales(1))
+
+print(mean(n_15_3000))
+print(mean(n_25_3000))
+print(mean(n_1_3000))
+print(mean(n_1_5))
+```
+
+#### e
+This experiment definitely shows how Central Limit Theorem comes into play. If you look at the histograms, the distribution definitely looks more normal as n increases, with the exception of n = 100 looking more normal than n = 150. However, CLT gives us normal distribution as an approximation so it's not going to be perfect. Also, when you see the total sales is 1 and only 5 replications, you can see how these lower numbers gave us a sample mean much farther off from the expected value calculated at the beginning of the problem when contrasted with higher replications and a higher n.
+
+## Problem 3
+### 1
+```{r}
+B <- 10000
+
+normal_5 <- replicate(B, rnorm(5, mean = 10, sd = 2))
+normal_10 <- replicate(B, rnorm(10, mean = 10, sd = 2))
+normal_15 <- replicate(B, rnorm(15, mean = 10, sd = 2))
+normal_25 <- replicate(B, rnorm(25, mean = 10, sd = 2))
+normal_30 <- replicate(B, rnorm(30, mean = 10, sd = 2))
+normal_50 <- replicate(B, rnorm(50, mean = 10, sd = 2))
+normal_100 <- replicate(B, rnorm(100, mean = 10, sd = 2))
+
+print(paste0("Expected value for n = 5: ", mean(normal_5)))
+print(paste0("Expected value for n = 10: ", mean(normal_10)))
+print(paste0("Expected value for n = 15: ", mean(normal_15)))
+print(paste0("Expected value for n = 25: ", mean(normal_25)))
+print(paste0("Expected value for n = 30: ", mean(normal_30)))
+print(paste0("Expected value for n = 50: ", mean(normal_50)))
+print(paste0("Expected value for n = 100: ", mean(normal_100)))
+
+print(paste0("Standard deviation for n = 5: ", sd(normal_5)))
+print(paste0("Standard deviation for n = 10: ", sd(normal_10)))
+print(paste0("Standard deviation for n = 15: ", sd(normal_15)))
+print(paste0("Standard deviation for n = 25: ", sd(normal_25)))
+print(paste0("Standard deviation for n = 30: ", sd(normal_30)))
+print(paste0("Standard deviation for n = 50: ", sd(normal_50)))
+print(paste0("Standard deviation for n = 100: ", sd(normal_100)))
+writeLines("\n")
+
+CLTN_5 <- replicate(B, rnorm(5, mean = 10, sd = 2/sqrt(5)))
+CLTN_10 <- replicate(B, rnorm(10, mean = 10, sd = 2/sqrt(10)))
+CLTN_15 <- replicate(B, rnorm(15, mean = 10, sd = 2/sqrt(15)))
+CLTN_25 <- replicate(B, rnorm(25, mean = 10, sd = 2/sqrt(25)))
+CLTN_30 <- replicate(B, rnorm(30, mean = 10, sd = 2/sqrt(30)))
+CLTN_50 <- replicate(B, rnorm(50, mean = 10, sd = 2/sqrt(50)))
+CLTN_100 <- replicate(B, rnorm(100, mean = 10, sd = 2/sqrt(100)))
+
+print(paste0("For the CLT Approximation for the normal distribution with mu = 10 and sigma = 2:"))
+print(paste0("Expected value for n = 5: ", mean(CLTN_5)))
+print(paste0("Expected value for n = 10: ", mean(CLTN_10)))
+print(paste0("Expected value for n = 15: ", mean(CLTN_15)))
+print(paste0("Expected value for n = 25: ", mean(CLTN_25)))
+print(paste0("Expected value for n = 30: ", mean(CLTN_30)))
+print(paste0("Expected value for n = 50: ", mean(CLTN_50)))
+print(paste0("Expected value for n = 100: ", mean(CLTN_100)))
+
+print(paste0("Standard deviation for n = 5: ", sd(CLTN_5)))
+print(paste0("Standard deviation for n = 10: ", sd(CLTN_10)))
+print(paste0("Standard deviation for n = 15: ", sd(CLTN_15)))
+print(paste0("Standard deviation for n = 25: ", sd(CLTN_25)))
+print(paste0("Standard deviation for n = 30: ", sd(CLTN_30)))
+print(paste0("Standard deviation for n = 50: ", sd(CLTN_50)))
+print(paste0("Standard deviation for n = 100: ", sd(CLTN_100)))
+```
+
+
+### 2
+```{r}
+exp_5 <- replicate(10000, rexp(5, 2))
+exp_10 <- replicate(10000, rexp(10, 2))
+exp_15 <- replicate(10000, rexp(15, 2))
+exp_25 <- replicate(10000, rexp(25, 2))
+exp_30 <- replicate(10000, rexp(30, 2))
+exp_50 <- replicate(10000, rexp(50, 2))
+exp_100 <- replicate(10000, rexp(100, 2))
+
+print(paste0("For the exponential distribution with lambda = 2:"))
+print(paste0("Expected value for n = 5: ", mean(exp_5)))
+print(paste0("Expected value for n = 10: ", mean(exp_10)))
+print(paste0("Expected value for n = 15: ", mean(exp_15)))
+print(paste0("Expected value for n = 25: ", mean(exp_25)))
+print(paste0("Expected value for n = 30: ", mean(exp_30)))
+print(paste0("Expected value for n = 50: ", mean(exp_50)))
+print(paste0("Expected value for n = 100: ", mean(exp_100)))
+
+print(paste0("Standard deviation for n = 5: ", sd(exp_5)))
+print(paste0("Standard deviation for n = 10: ", sd(exp_10)))
+print(paste0("Standard deviation for n = 15: ", sd(exp_15)))
+print(paste0("Standard deviation for n = 25: ", sd(exp_25)))
+print(paste0("Standard deviation for n = 30: ", sd(exp_30)))
+print(paste0("Standard deviation for n = 50: ", sd(exp_50)))
+print(paste0("Standard deviation for n = 100: ", sd(exp_100)))
+writeLines("\n")
+
+CLT_5 <- replicate(10000, rnorm(5, .5, .5/sqrt(5)))
+CLT_10 <- replicate(10000, rnorm(10, .5, .5/sqrt(10)))
+CLT_15 <- replicate(10000, rnorm(15, .5, .5/sqrt(15)))
+CLT_25 <- replicate(10000, rnorm(25, .5, .5/sqrt(25)))
+CLT_30 <- replicate(10000, rnorm(30, .5, .5/sqrt(30)))
+CLT_50 <- replicate(10000, rnorm(50, .5, .5/sqrt(50)))
+CLT_100 <- replicate(10000, rnorm(100, .5, .5/sqrt(100)))
+
+print(paste0("For the CLT Approximation for the exponential distribution with lambda = 2:"))
+print(paste0("Expected value for n = 5: ", mean(CLT_5)))
+print(paste0("Expected value for n = 10: ", mean(CLT_10)))
+print(paste0("Expected value for n = 15: ", mean(CLT_15)))
+print(paste0("Expected value for n = 25: ", mean(CLT_25)))
+print(paste0("Expected value for n = 30: ", mean(CLT_30)))
+print(paste0("Expected value for n = 50: ", mean(CLT_50)))
+print(paste0("Expected value for n = 100: ", mean(CLT_100)))
+
+print(paste0("Standard deviation for n = 5: ", sd(CLT_5)))
+print(paste0("Standard deviation for n = 10: ", sd(CLT_10)))
+print(paste0("Standard deviation for n = 15: ", sd(CLT_15)))
+print(paste0("Standard deviation for n = 25: ", sd(CLT_25)))
+print(paste0("Standard deviation for n = 30: ", sd(CLT_30)))
+print(paste0("Standard deviation for n = 50: ", sd(CLT_50)))
+print(paste0("Standard deviation for n = 100: ", sd(CLT_100)))
+```
+
+### 3
+```{r}
+gamma_5 <- replicate(10000, rgamma(5, 2, 1/3))
+gamma_10 <- replicate(10000, rgamma(10, 2, 1/3))
+gamma_15 <- replicate(10000, rgamma(15, 2, 1/3))
+gamma_25 <- replicate(10000, rgamma(25, 2, 1/3))
+gamma_30 <- replicate(10000, rgamma(30, 2, 1/3))
+gamma_50 <- replicate(10000, rgamma(50, 2, 1/3))
+gamma_100 <- replicate(10000, rgamma(100, 2, 1/3))
+
+print(paste0("For the gamma distribution with alpha = 2 and beta = 1/3:"))
+print(paste0("Expected value for n = 5: ", mean(gamma_5)))
+print(paste0("Expected value for n = 10: ", mean(gamma_10)))
+print(paste0("Expected value for n = 15: ", mean(gamma_15)))
+print(paste0("Expected value for n = 25: ", mean(gamma_25)))
+print(paste0("Expected value for n = 30: ", mean(gamma_30)))
+print(paste0("Expected value for n = 50: ", mean(gamma_50)))
+print(paste0("Expected value for n = 100: ", mean(gamma_100)))
+
+print(paste0("Standard deviation for n = 5: ", sd(gamma_5)))
+print(paste0("Standard deviation for n = 10: ", sd(gamma_10)))
+print(paste0("Standard deviation for n = 15: ", sd(gamma_15)))
+print(paste0("Standard deviation for n = 25: ", sd(gamma_25)))
+print(paste0("Standard deviation for n = 30: ", sd(gamma_30)))
+print(paste0("Standard deviation for n = 50: ", sd(gamma_50)))
+print(paste0("Standard deviation for n = 100: ", sd(gamma_100)))
+writeLines("\n")
+
+CLTG_5 <- replicate(10000, rnorm(5, 6, sqrt(18)/sqrt(5)))
+CLTG_10 <- replicate(10000, rnorm(10, 6, sqrt(18)/sqrt(10)))
+CLTG_15 <- replicate(10000, rnorm(15, 6, sqrt(18)/sqrt(15)))
+CLTG_25 <- replicate(10000, rnorm(25, 6, sqrt(18)/sqrt(25)))
+CLTG_30 <- replicate(10000, rnorm(30, 6, sqrt(18)/sqrt(30)))
+CLTG_50 <- replicate(10000, rnorm(50, 6, sqrt(18)/sqrt(50)))
+CLTG_100 <- replicate(10000, rnorm(100, 6, sqrt(18)/sqrt(100)))
+
+print(paste0("For the CLT approximation of the gamma distribution with alpha = 2 and beta = 1/3:"))
+print(paste0("Expected value for n = 5: ", mean(CLTG_5)))
+print(paste0("Expected value for n = 10: ", mean(CLTG_10)))
+print(paste0("Expected value for n = 15: ", mean(CLTG_15)))
+print(paste0("Expected value for n = 25: ", mean(CLTG_25)))
+print(paste0("Expected value for n = 30: ", mean(CLTG_30)))
+print(paste0("Expected value for n = 50: ", mean(CLTG_50)))
+print(paste0("Expected value for n = 100: ", mean(CLTG_100)))
+
+print(paste0("Standard deviation for n = 5: ", sd(CLTG_5)))
+print(paste0("Standard deviation for n = 10: ", sd(CLTG_10)))
+print(paste0("Standard deviation for n = 15: ", sd(CLTG_15)))
+print(paste0("Standard deviation for n = 25: ", sd(CLTG_25)))
+print(paste0("Standard deviation for n = 30: ", sd(CLTG_30)))
+print(paste0("Standard deviation for n = 50: ", sd(CLTG_50)))
+print(paste0("Standard deviation for n = 100: ", sd(CLTG_100)))
+```
+
+### 4
+```{r}
+chi_5 <- replicate(10000, rchisq(5, 5))
+chi_10 <- replicate(10000, rchisq(10, 5))
+chi_15 <- replicate(10000, rchisq(15, 5))
+chi_25 <- replicate(10000, rchisq(25, 5))
+chi_30 <- replicate(10000, rchisq(30, 5))
+chi_50 <- replicate(10000, rchisq(50, 5))
+chi_100 <- replicate(10000, rchisq(100, 5))
+
+print(paste0("For the chi-squared distribution with 5 degrees of freedom:"))
+print(paste0("Expected value for n = 5: ", mean(chi_5)))
+print(paste0("Expected value for n = 10: ", mean(chi_10)))
+print(paste0("Expected value for n = 15: ", mean(chi_15)))
+print(paste0("Expected value for n = 25: ", mean(chi_25)))
+print(paste0("Expected value for n = 30: ", mean(chi_30)))
+print(paste0("Expected value for n = 50: ", mean(chi_50)))
+print(paste0("Expected value for n = 100: ", mean(chi_100)))
+
+print(paste0("Standard deviation for n = 5: ", sd(chi_5)))
+print(paste0("Standard deviation for n = 10: ", sd(chi_10)))
+print(paste0("Standard deviation for n = 15: ", sd(chi_15)))
+print(paste0("Standard deviation for n = 25: ", sd(chi_25)))
+print(paste0("Standard deviation for n = 30: ", sd(chi_30)))
+print(paste0("Standard deviation for n = 50: ", sd(chi_50)))
+print(paste0("Standard deviation for n = 100: ", sd(chi_100)))
+writeLines("\n")
+
+CLTC_5 <- replicate(10000, rnorm(5, 5, sqrt(10)/sqrt(5)))
+CLTC_10 <- replicate(10000, rnorm(10, 5, sqrt(10)/sqrt(10)))
+CLTC_15 <- replicate(10000, rnorm(15, 5, sqrt(10)/sqrt(15)))
+CLTC_25 <- replicate(10000, rnorm(25, 5, sqrt(10)/sqrt(25)))
+CLTC_30 <- replicate(10000, rnorm(30, 5, sqrt(10)/sqrt(30)))
+CLTC_50 <- replicate(10000, rnorm(50, 5, sqrt(10)/sqrt(50)))
+CLTC_100 <- replicate(10000, rnorm(100, 5, sqrt(10)/sqrt(100)))
+
+print(paste0("For the CLT approximation of the chi-squared distribution with 5 degrees of freedom:"))
+print(paste0("Expected value for n = 5: ", mean(CLTC_5)))
+print(paste0("Expected value for n = 10: ", mean(CLTC_10)))
+print(paste0("Expected value for n = 15: ", mean(CLTC_15)))
+print(paste0("Expected value for n = 25: ", mean(CLTC_25)))
+print(paste0("Expected value for n = 30: ", mean(CLTC_30)))
+print(paste0("Expected value for n = 50: ", mean(CLTC_50)))
+print(paste0("Expected value for n = 100: ", mean(CLTC_100)))
+
+print(paste0("Standard deviation for n = 5: ", sd(CLTC_5)))
+print(paste0("Standard deviation for n = 10: ", sd(CLTC_10)))
+print(paste0("Standard deviation for n = 15: ", sd(CLTC_15)))
+print(paste0("Standard deviation for n = 25: ", sd(CLTC_25)))
+print(paste0("Standard deviation for n = 30: ", sd(CLTC_30)))
+print(paste0("Standard deviation for n = 50: ", sd(CLTC_50)))
+print(paste0("Standard deviation for n = 100: ", sd(CLTC_100)))
+```
+
+
+In the cases of each distribution, CLT was able to give out values for E(X) that were just as close as the values given when using the actual distributions without approximation. However, CLT gave standard distributions that were approximately sigma/sqrt(n) since that is the parameter that CLT uses instead of sigma. So, CLT gave smaller standard deviations than the actual distributions.
+
+
+
+
+
+
+
+
+
+# Project 2
+
+```{r}
+# for use of the between function
+library(dplyr)
+```
+
+
+## Problem 1
+### 1
+
+#### a
+```{r}
+pop_mean_interval <- function(alpha, n, sigma, sample_mean){
+  # find z value for alpha/2
+  a <- 1-(alpha/2)
+  z_alpha_2 <- qnorm(a, 0, 1)
+  # find upper and lower bounds
+  lower_bound <- sample_mean - (sigma/sqrt(n))*z_alpha_2
+  upper_bound <- sample_mean + (sigma/sqrt(n))*z_alpha_2
+  # create interval
+  ci <- paste0("(", lower_bound, ",", upper_bound, ")")
+  return(ci)
+}
+```
+
+#### b
+```{r}
+pop_mean_interval2 <- function(alpha, sample){
+  # find sigma, sample mean, and n
+  sigma <- sd(sample)
+  x <- mean(sample)
+  n <- length(sample)
+  # find z value for alpha/2
+  a <- 1-(alpha/2)
+  z_alpha_2 <- qnorm(a, 0, 1)
+  # find upper and lower bounds
+  lower_bound <<- x - (sigma/sqrt(n))*z_alpha_2
+  upper_bound <<- x + (sigma/sqrt(n))*z_alpha_2
+  # create interval
+  ci <- paste0("(", lower_bound, ",", upper_bound, ")")
+  return(ci)
+}
+
+```
+
+#### c
+```{r}
+pop_proportion <- function(alpha, n, p_hat){
+  # find z value for alpha/2
+  a <- 1-(alpha/2)
+  z_alpha_2 <- qnorm(a, 0, 1)
+  # find p1
+  p1 <- (p_hat + (z_alpha_2/(2*n)))/(1 + (z_alpha_2/n))
+  # find bounds
+  num <- sqrt((p_hat*(1-p_hat))/n + ((z_alpha_2^2)/(4*n^2)))
+  denom <- 1 + (z_alpha_2^2)/n
+  lower_bound <- p1 - z_alpha_2*(num/denom)
+  upper_bound <- p1 + z_alpha_2*(num/denom)
+  # create interval
+  ci <- paste0("(", lower_bound, ",", upper_bound, ")")
+  return(ci)
+}
+```
+
+#### d
+```{r}
+big_pop_prop <- function(alpha, n, p_hat){
+  # find z value for alpha/2
+  a <- 1-(alpha/2)
+  z_alpha_2 <- qnorm(a, 0, 1)
+  # find bounds
+  lower_bound <- p_hat - z_alpha_2*(sqrt(p_hat*(1 - p_hat)/n))
+  upper_bound <- p_hat + z_alpha_2*(sqrt(p_hat*(1 - p_hat)/n))
+  # create interval
+  ci <- paste0("(", lower_bound, ",", upper_bound, ")")
+  return(ci)
+}
+```
+
+#### e
+```{r}
+pop_variance <- function(alpha, n, s){
+  # find necessary chi^2 values for limits
+  chi_low <- qchisq(alpha/2, n-1)
+  chi_up <- qchisq(1 - alpha/2, n-1)
+  # find limits 
+  lower_limit <- ((n-1)*s^2)/chi_low
+  upper_limit <- ((n-1)*s^2)/chi_up
+  # create interval
+  ci <- paste0("(", lower_limit, ",", upper_limit, ")")
+  return(ci)
+}
+
+pop_sd <- function(alpha, n, s){
+  # find necessary chi^2 values for limits
+  chi_low <- qchisq(alpha/2, n-1)
+  chi_up <- qchisq(1 - alpha/2, n-1)
+  # find limits for variance
+  lower_limit <- ((n-1)*s^2)/chi_low
+  upper_limit <- ((n-1)*s^2)/chi_up
+  # for sd
+  low_limit_sd <- sqrt(lower_limit)
+  upper_limit_sd <- srt(upper_limit)
+  ci_sd <- paste0("(", lower_limit_sd, ",", upper_limit_sd, ")")
+  return(ci_sd)
+}
+```
+
+### 2
+#### a
+```{r}
+pop_mean_width <- function(alpha, n, sigma){
+# find z value for alpha/2
+  a <- 1-(alpha/2)
+  z_alpha_2 <- qnorm(a, 0, 1)
+  # find width
+  w <- 2*z_alpha_2*(sigma/sqrt(n))
+  return(w)
+}
+```
+
+#### b
+```{r}
+pop_mean_width2 <- function(alpha, sample){
+  # find sigma and n
+  sigma <- sd(sample)
+  n <- length(sample)
+  # find z value for alpha/2
+  a <- 1-(alpha/2)
+  z_alpha_2 <- qnorm(a, 0, 1)
+  # find width
+  w <- 2*z_alpha_2*(sigma/sqrt(n))
+  return(w)
+}
+```
+
+#### c
+```{r}
+pop_proportion_width <- function(alpha, n, p_hat){
+  # find z value for alpha/2
+  a <- 1-(alpha/2)
+  z_alpha_2 <- qnorm(a, 0, 1)
+  # find p1
+  p1 <- (p_hat + (z_alpha_2/(2*n)))/(1 + (z_alpha_2/n))
+  # find bounds
+  num <- sqrt((p_hat*(1-p_hat))/n + ((z_alpha_2^2)/(4*n^2)))
+  denom <- 1 + (z_alpha_2^2)/n
+  lower_bound <- p1 - z_alpha_2*(num/denom)
+  upper_bound <- p1 + z_alpha_2*(num/denom)
+  # find width
+  w <- upper_bound - lower_bound
+  return(w)
+}
+```
+
+#### d
+```{r}
+big_pop_width <- function(alpha, n, p_hat){
+  # find z value for alpha/2
+  a <- 1-(alpha/2)
+  z_alpha_2 <- qnorm(a, 0, 1)
+  # find bounds
+  lower_bound <- p_hat - z_alpha_2*(sqrt(p_hat*(1 - p_hat)/n))
+  upper_bound <- p_hat + z_alpha_2*(sqrt(p_hat*(1 - p_hat)/n))
+  # find width
+  w <- upper_bound - lower_bound
+  return(w)
+}
+```
+
+#### e
+```{r}
+pop_var_width <- function(alpha, s, n){
+  # find necessary chi^2 values for limits
+  chi_low <- qchisq(alpha/2, n-1)
+  chi_up <- qchisq(1 - alpha/2, n-1)
+  # find limits 
+  lower_limit <- ((n-1)*s^2)/chi_low
+  upper_limit <- ((n-1)*s^2)/chi_up
+  # find width
+  w <- upper_limit - lower_limit
+  return(w)
+}
+
+pop_sd_width <- function(alpha, s, n){
+  # find necessary chi^2 values for limits
+  chi_low <- qchisq(alpha/2, n-1)
+  chi_up <- qchisq(1 - alpha/2, n-1)
+  # find limits for variance
+  lower_limit <- ((n-1)*s^2)/chi_low
+  upper_limit <- ((n-1)*s^2)/chi_up
+  # for sd
+  low_limit_sd <- sqrt(lower_limit)
+  upper_limit_sd <- srt(upper_limit)
+  # find width
+  w <- upper_limit_sd - low_limit_sd
+  return(w)
+}
+```
+
+### 3
+```{r}
+alpha <- 0.05
+# n = 10
+paste0("n = 10, p = .2")
+pop_proportion_width(.05, 10, .2)
+big_pop_width(.05, 10, .2)
+# n = 20
+paste0("n = 20, p = .2")
+pop_proportion_width(.05, 20, .2)
+big_pop_width(.05, 20, .2)
+# n = 50
+paste0("n = 50, p = .2")
+pop_proportion_width(.05, 50, .2)
+big_pop_width(.05, 50, .2)
+# n = 100
+paste0("n = 100, p = .2")
+pop_proportion_width(.05, 100, .2)
+big_pop_width(.05, 100, .2)
+# n = 1000
+paste0("n = 1000, p = .2")
+pop_proportion_width(.05, 1000, .2)
+big_pop_width(.05, 1000, .2)
+
+# p = .8
+paste0("n = 10, p = .8")
+pop_proportion_width(.05, 10, .8)
+big_pop_width(.05, 10, .8)
+# n = 20
+paste0("n = 20, p = .8")
+pop_proportion_width(.05, 20, .8)
+big_pop_width(.05, 20, .8)
+# n = 50
+paste0("n = 50, p = .8")
+pop_proportion_width(.05, 50, .8)
+big_pop_width(.05, 50, .8)
+# n = 100
+paste0("n = 100, p = .8")
+pop_proportion_width(.05, 100, .8)
+big_pop_width(.05, 100, .8)
+# n = 1000
+paste0("n = 1000, p = .8")
+pop_proportion_width(.05, 1000, .8)
+big_pop_width(.05, 1000, .8)
+```
+
+
+
+
+# Project 3
+
+# Problem 1
+
+```{r}
+# general function to find z values
+zval <- function(value){
+  a <- 1-(value)
+  zvalue <- qnorm(a, 0, 1)
+  return(zvalue)
+}
+```
+
+## Finding test statistics and P values
+
+Test statistic functions to use in 1-6
+
+```{r}
+# Test statistic function
+# Note: can use s in place of the sigma parameter or dbar in place of the xbar parameter for appropriate functions.
+# Note: can be used to find a t test statistic, t will just be called z in this function instead
+find_stat_1 <- function(xbar, mu0, sigma, n){
+    z <- (xbar - mu0)/(sigma/sqrt(n))
+    return(z)
+}
+
+# function for finding test statistic for population proportion
+find_stat_prop <- function(phat, p0, n){
+  z <- (phat - p0)/sqrt(p0(1-p0)/n)
+}
+
+# test statistic function for difference of two means
+find_stat_2 <- function(xbar, ybar, delta0, s1, s2, m, n){
+  z <- (xbar - ybar - delta0)/sqrt(s1^2/m+s2^2/n)
+}
+```
+
+P Value functions to use in 1-6
+
+```{r}
+# find p value from a normal distribution using z
+z_test <- function(z, test){
+  if(test == "lower"){
+      pval <- pnorm(z, mean = 0, sd = 1)
+    }
+    # if testing mu > mu0
+    if(test == "upper"){
+      pval <- pnorm(z, mean = 0, sd = 1, lower.tail = FALSE)
+    }
+    # if testing mu != mu0
+    if(test == "notequal"){
+      pval <- 2*pnorm(abs(z), mean = 0, sd = 1, lower.tail = FALSE)
+    }
+  return(pval)
+}
+
+# find p value for a t test
+t_test <- function(t, test, n){
+  # find degrees of freedom
+    v <- n - 1
+    # find p value
+    # if testing mu < mu0
+    if(test == "lower"){
+      pval <<- pt(t, df = v)
+    }
+    # if testing mu > mu0
+    if(test == "upper"){
+      pval <<- pt(t, df = v, lower.tail = FALSE)
+    }
+    # if testing mu != mu0
+    if(test == "notequal"){
+      pval <<- 2*pt(abs(t), df = v, lower.tail = FALSE)
+    }
+  return(pval)
+}
+
+# find p value for a binomial distribution when proportion is small enough
+binom_test <- function(successes, p0, n, test){
+  if(test == "lower"){
+    pval <- pbinom(successes, n, p0)
+  }
+  # if testing p > p0
+  if(test == "upper"){
+    pval <- pbinom(successes, n, p0, lower.tail = FALSE)
+  }
+  # if testing p != p0
+  if(test == "notequal"){
+    pval <- 2*pbinom(successes, n, p0, lower.tail = FALSE)
+  }
+  return(pval)
+}
+```
+
+### 1 and 2
+```{r}
+# The variables are created for number 1, but the process for 2 is the same just setting the sigma variable = s.
+# set need_stat = TRUE only if no z is input into the function. This is true for all functions with a need_stat parameter.
+single_mean_pval <- function(xbar, mu0, sigma, n, test, z, need_stat){
+  if(need_stat == TRUE){
+    z <- find_stat_1(xbar, mu0, sigma, n)
+  }
+  pval <- z_test(z, test)
+  return(pval)
+}
+```
+
+### 3
+```{r}
+single_mean_pval_any_n <- function(xbar, mu0, s, n, test, z, need_stat){
+  if(n > 30){
+    # use CLT
+    if(need_stat == TRUE){
+      z <- find_stat_1(xbar, mu0, s, n)
+    }
+    pval <- z_test(z, test)
+  }
+  if(n <= 30){
+    t <- z
+    if(need_stat == TRUE){
+      t <- find_stat_1(xbar, mu0, s, n)
+    }
+    pval <- t_test(t, test, n)
+  }
+  return(pval)
+}
+```
+
+### 4
+```{r}
+pop_proportion_pval <- function(successes, p0, n, test, z, need_stat){
+  if(n > 30){
+    # use CLT
+    phat <- successes/n
+    if(need_stat == TRUE){
+      z <- find_stat_prop(phat, p0, n)
+    }
+    pval <- z_test(z, test)
+  }
+  if(n <= 30){
+    pval <- binom_test(successes, p0, n, test)
+  }
+  return(pval)
+}
+```
+
+### 5
+```{r}
+two_sample_mean <- function(xbar, ybar, delta0, s1, s2, m, n, test, z, need_stat){
+  if(need_stat == TRUE){
+    z <- find_stat_2(xbar, ybar, delta0, s1, s2, m, n)
+  }
+  if(n > 30 && m > 30){
+    # use CLT
+    pval <- z_test(z, test)
+  }
+  if(n <= 30 | m <= 30){
+    # find degrees of freedom
+    a <- (s1^2/m +s2^2/n)^2
+    b <- (s1^2/m)^2/(m-1)
+    c <- (s2^2/n)^2/(n-1)
+    v <- a/(b+c)
+    # z and t are calculated identically, so no need to recalculate a variable
+    # have to make n v+1 in parameter so that when function finds degrees of freedom it is v+1-1 = v already calculated.
+    pval <- t_test(z, test, n = v+1)
+  }
+  return(pval)
+}
+```
+
+### 6
+```{r}
+two_sample_difference_mean <- function(x, y, mu0, n, test, t, need_stat){
+  if(need_stat == TRUE){
+    # find D_i's and Dbar, s
+  D <- rep(0, length(sample1))
+  for(i in seq_along(sample1)){
+    D[i] <- x[i] - y[i]
+  }
+  dbar <- mean(D)
+  s <- sd(D)
+  t <- find_stat_1(xbar = dbar, mu0, sigma = s, n)
+  }
+  pval <- t_test(t, test, n)
+  return(pval)
+}
+```
+
+## Type II errors and Sample Sizes
+
+### 1
+```{r}
+# type II error for one sample population mean with sigma known
+type2_pop_mean <- function(sigma, n, mu0, mu1, alpha, test){
+  # when testing mu < mu0
+  if(test == "lower"){
+    beta <- pnorm((zval(alpha) + ((mu0-mu1)/(sigma/sqrt(n)))), mean = 0, sd = 1)
+  }
+  # when testing mu > mu0
+  if(test == "upper"){
+    beta <- 1 - pnorm((-zval(alpha) + ((mu0-mu1)/(sigma/sqrt(n)))), mean = 0, sd = 1)
+  }
+  # when testing mu != mu0
+  if(test == "notequal"){
+    part1 <- pnorm((zval(alpha/2) + ((mu0 - mu1)/(sigma/sqrt(n)))), mean = 0, sd = 1) 
+    part2 <- pnorm((-zval(alpha/2) + ((mu0 - mu1)/(sigma/sqrt(n)))), mean = 0, sd = 1)
+    beta <- part1 - part2
+  }
+  return(beta)
+}
+```
+
+```{r}
+# sample size for one sample population mean
+sample_size_single_population <- function(mu0, mu1, sigma, alpha, beta, test){
+  if(test == "notequal"){
+    n <- ((sigma*(zval(alpha/2)+zval(beta)))/(mu0 - mu1))^2
+  }
+  else{
+    n <- ((sigma*(zval(alpha)+zval(beta)))/(mu0 - mu1))^2 
+  }
+  return(n)
+}  
+  
+```
+
+### 2
+```{r}
+# type II error for two sample population mean
+type2_two_sample_pop_mean <- function(delta0, delta1, sigma, alpha, test){
+  # when testing mu1-mu2 < delta0
+  if(test == "lower"){
+    beta <- pnorm(zval(alpha) - (delta1 - delta0)/sigma, mean = 0, sd = 1)
+  }
+  # when testing mu1-mu2 > delta0
+  if(test == "upper"){
+    beta <- 1 - pnorm(-zval(alpha) - (delta1 - delta0)/sigma, mean = 0, sd = 1)
+  }
+  # when testing mu1-mu2 != delta0
+  if(test == "notequal"){
+    part1 <- pnorm(zval(alpha/2) - (delta1 - delta0)/sigma, mean = 0, sd = 1) 
+    part2 <- pnorm(-zval(alpha/2) - (delta1 - delta0)/sigma, mean = 0, sd = 1)
+    beta <- part1 - part2
+  }
+  return(beta) 
+}
+
+```
+
+```{r}
+# sample sizes for two sample population mean
+sample_size_two_population <- function(delta0, delta1, alpha, beta, sigma1, sigma2){
+  # find m or n
+  m <- ((sigma1^2-sigma2^2)*(zval(alpha) + zval(beta))^2)/(delta1 - delta0)^2
+  return(m)
+}
+```
+
+# Problem 2
+## 2.1
+```{r}
+test_statistics <- function(mu, sigma, n, B){
+  # initialize vectors to use in for loop
+  z <- rep(0, B)
+  x_i <- rep(0, n)
+  # create B amount of test statistics
+  for( i in 1:B){
+    x_i[1:n] <- rnorm(n, mean = mu, sd = sigma)
+    xbar <- mean(x_i[1:n])
+    z[i] <- (xbar - mu)/(sigma/sqrt(n))
+  }
+  return(z)
+}
+
+# type parameter is used for choosing which type of p value you want to create.
+p_values_upper <- function(m, n, z, type){
+  pval <- rep(0, length(z))
+  for(i in seq_along(z)){
+    if(type == 1 | type == 2){
+      pval[i] <- single_mean_pval(test = "upper", z = z[i], need_stat = FALSE)
+    }
+    if(type == 3){
+      pval[i] <- single_mean_pval_any_n(n = n, test = "upper", z = z[i], need_stat = FALSE)
+    }
+    if(type == 4){
+      pval[i] <- pop_proportion_pval(n = n, test = "upper", z = z[i], need_stat = FALSE)
+    }
+    if(type == 5){
+      pval[i] <- two_sample_mean(m = m, n = n, test = "upper", z = z[i], need_stat = FALSE)
+    }
+    if(type == 6){
+      pval[i] <- two_sample_difference_mean(n = n, test = "upper", t = z[i])
+    }
+  }
+  return(pval)
+}
+
+p_values_lower <- function(m, n, z, type){
+  pval <- rep(0, length(z))
+  for(i in seq_along(z)){
+    if(type == 1 | type == 2){
+      pval[i] <- single_mean_pval(test = "lower", z = z[i], need_stat = FALSE)
+    }
+    if(type == 3){
+      pval[i] <- single_mean_pval_any_n(n = n, test = "lower", z = z[i], need_stat = FALSE)
+    }
+    if(type == 4){
+      pval[i] <- pop_proportion_pval(n = n, test = "lower", z = z[i], need_stat = FALSE)
+    }
+    if(type == 5){
+      pval[i] <- two_sample_mean(m = m, n = n, test = "lower", z = z[i], need_stat = FALSE)
+    }
+    if(type == 6){
+      pval[i] <- two_sample_difference_mean(n = n, test = "lower", t = z[i])
+    }
+  }
+  return(pval)
+}
+
+p_values_twosided <- function(m, n, z, type){
+  pval <- rep(0, length(z))
+  for(i in seq_along(z)){
+    if(type == 1 | type == 2){
+      pval[i] <- single_mean_pval(test = "notequal", z = z[i], need_stat = FALSE)
+    }
+    if(type == 3){
+      pval[i] <- single_mean_pval_any_n(n = n, test = "notequal", z = z[i], need_stat = FALSE)
+    }
+    if(type == 4){
+      pval[i] <- pop_proportion_pval(n = n, test = "notequal", z = z[i], need_stat = FALSE)
+    }
+    if(type == 5){
+      pval[i] <- two_sample_mean(m = m, n = n, test = "notequal", z = z[i], need_stat = FALSE)
+    }
+    if(type == 6){
+      pval[i] <- two_sample_difference_mean(n = n, test = "notequal", t = z[i])
+    }
+  }
+  return(pval)
+}
+```
+
+## 2.2
+```{r}
+mu0 <- 95
+alpha <- 0.05
+# create test statistics
+z <- test_statistics(mu = 95, sigma = 1.2, n = 16, B = 10000)
+# find their p values with the correct p value test
+
+# lower p value test
+pvals <- p_values_lower(z = z, type = 1)
+# count how many p values are less than alpha
+total <- 0
+for(i in seq_along(z)){
+  if(alpha > pvals[i]){
+    total <- total + 1
+  }
+}
+prop_rejected <- total/length(pvals)
+paste0("Proportion of null hypothesis rejected when true for lower test = ", prop_rejected)
+
+# upper p value test
+pvals <- p_values_upper(z = z, type = 1)
+# count how many p values are less than alpha
+total <- 0
+for(i in seq_along(z)){
+  if(alpha > pvals[i]){
+    total <- total + 1
+  }
+}
+prop_rejected <- total/length(pvals)
+paste0("Proportion of null hypothesis rejected when true for upper test = ", prop_rejected)
+
+# two sided p value test
+pvals <- p_values_twosided(z = z, type = 1)
+# count how many p values are less than alpha
+total <- 0
+for(i in seq_along(z)){
+  if(alpha > pvals[i]){
+    total <- total + 1
+  }
+}
+prop_rejected <- total/length(pvals)
+paste0("Proportion of null hypothesis rejected when true for two sided test = ", prop_rejected)
+```
+
+## 2.3
+```{r}
+mu0 <- 93
+alpha <- .05
+# create test statistics
+z <- test_statistics(mu = 93, sigma = 1.2, n = 16, B = 10000)
+# lower p value test
+pvals <- p_values_lower(z = z, type = 1)
+# count how many p values are greater than alpha
+total <- 0
+for(i in seq_along(z)){
+  if(alpha < pvals[i]){
+    total <- total + 1
+  }
+}
+empirical_II_error_lower <- total/length(pvals)
+paste0("Proportion of null hypothesis not rejected when false for lower test = ", empirical_II_error_lower)
+
+# upper p value test
+pvals <- p_values_upper(z = z, type = 1)
+# count how many p values are greater than alpha
+total <- 0
+for(i in seq_along(z)){
+  if(alpha < pvals[i]){
+    total <- total + 1
+  }
+}
+empirical_II_error_upper <- total/length(pvals)
+paste0("Proportion of null hypothesis not rejected when false for upper test = ", empirical_II_error_upper)
+
+# two sided p value test
+pvals <- p_values_twosided(z = z, type = 1)
+# count how many p values are greater than alpha
+total <- 0
+for(i in seq_along(z)){
+  if(alpha < pvals[i]){
+    total <- total + 1
+  }
+}
+empirical_II_error_twosided <- total/length(pvals)
+paste0("Proportion of null hypothesis not rejected when false for two sided test = ", empirical_II_error_twosided)
+```
+
+```{r}
+# theoretical type II errors
+type2_pop_mean(sigma = 1.2, n = 16, mu0 = 93, mu1 = 95, alpha = .05, test = "lower")
+type2_pop_mean(sigma = 1.2, n = 16, mu0 = 93, mu1 = 95, alpha = .05, test = "upper")
+type2_pop_mean(sigma = 1.2, n = 16, mu0 = 93, mu1 = 95, alpha = .05, test = "notequal")
+```
+The empirical type II error and theoretical type II error did not match up in this experiment.
+
+
+
+
+# Project 4
+
+
+
+## 1) Constructing Functions for Linear Regression Models
+### 1
+```{r}
+# function for Sxx
+sxx <- function(x){
+  sxx <- sum(x^2) - (sum(x))^2/length(x)
+  return(sxx)
+}
+
+# function for Sxy
+sxy <- function(x, y){
+  sxy <- sum(x*y) - (sum(x)*sum(y))/length(x)
+  return(sxy)
+}
+
+# function for Syy
+syy <- function(y){
+  y2 <- rep(0, length(y))
+  for(i in 1:length(y)){
+    y2[i] <- y[i]^2
+  }
+  syy <- sum(y2) - (sum(y))^2/length(y)
+  return(syy)
+}
+```
+
+### 2
+```{r}
+# function for estimator of beta0
+beta0 <- function(x, y, beta1){
+  beta0 <- sum(y)/length(y) - beta1*(sum(x)/length(x))
+  return(beta0)
+}
+
+# function for estimator of beta1
+beta1 <- function(x, y){
+  num <- sxy(x, y)
+  denom <- sxx(x)
+  beta1 <- num/denom
+  return(beta1)
+}
+
+# function for estimator of sigma0
+sigma0 <- function(x, y){
+  syy1 <- syy(y)
+  sxy1 <- sxy(x, y)
+  beta <- beta1(x, y)
+  n <- length(x)
+  sigma2 <- (syy1 - beta*sxy1)/(n-2)
+  sigma <- sqrt(sigma2)
+  return(sigma)
+}
+```
+
+### 3
+```{r}
+# function for coefficient of determination r^2
+r2 <- function(x, y){
+  syy1 <- syy(y)
+  sxy1 <- sxy(x, y)
+  beta <- beta1(x, y)
+  r2 <- 1 - (syy1 - beta*sxy1)/syy1
+  return(r2)
+}
+```
+
+### 4
+```{r}
+# function for standard error of beta1
+s_beta1 <- function(x, sigma){
+  sxx1 <- sxx(x)
+  sigma_beta1 <- sigma/sqrt(sxx1)
+  return(sigma_beta1)
+}
+```
+
+```{r}
+# function for standard error of Y
+s_y <- function(x, s, xstar){
+  n <- length(x)
+  xbar <- sum(x)/n
+  sxx1 <- sxx(x)
+  s_y <- s*sqrt((1/n)+(xstar - xbar)^2/sxx1)
+  return(s_y)
+}
+```
+
+### 5
+```{r}
+# function for correlation coefficient r
+r <- function(x, y){
+  sxx1 <- sxx(x)
+  sxy1 <- sxy(x, y)
+  syy1 <- syy(y)
+  r <- sxy1/(sqrt(sxx1)*sqrt(syy1))
+  return(r)
+}
+```
+
+## 2) Simulations for Confidence Intervals for Model Parameters
+```{r}
+beta_0 <- -20
+beta_1 <- 3.2
+sig <- 26
+x_true <- seq(60,100, length.out = 10)
+y_true <- beta_0 + beta_1*x_true
+```
+
+```{r}
+# function to calculate t values
+tval <- function(value, v){
+  a <- 1-(value)
+  tvalue <- qt(a, v)
+  return(tvalue)
+}
+```
+
+### 1) Beta 1
+```{r}
+# Expected Value
+paste0("Theoretical Expected beta 1 = ", beta_1)
+
+# Standard Deviation
+theoretical_beta_s <- s_beta1(x = x_true, sigma = sig)
+paste0("Theoretical beta s = ", theoretical_beta_s)
+
+# Confidence Interval
+# function
+beta1_ci <- function(x, y, sigma, alpha){
+  n <- length(x)
+  beta <- beta1(x, y)
+  s_beta <- s_beta1(x, sigma)
+  lower_bound <- beta - tval(alpha/2, n-2)*s_beta
+  upper_bound <- beta + tval(alpha/2, n-2)*s_beta
+  ci <- paste0("(", lower_bound, ",", upper_bound, ")")
+  return(ci)
+}
+# use
+Theoretical_beta1_ci <- beta1_ci(x_true, y_true, sig, .05)
+paste0("Theoretical 95% Confidence Interval for beta 1 = ", Theoretical_beta1_ci)
+```
+
+```{r}
+# simulation
+# calculate experimental vector for beta1
+sim_beta1 <- data.frame(10, 1000)
+# choose to do 1000 repetitions for experiment of 10 observations each
+for(j in 1:1000){
+  sim_beta1[1:10,j] <- rnorm(10, beta_1, theoretical_beta_s)
+}
+
+# Empirical Expected Value for Beta1
+means <- rep(0, 1000)
+for(i in 1:1000){
+  means[i] <- mean(sim_beta1[1:10,i])
+}
+
+paste0("Simulated Empirical Expected Value for beta 1 = ", mean(means))
+
+# Empirical Standard Deviation for Beta1
+s_beta1s <- rep(0, 1000)
+for(i in 1:1000){
+  s_beta1s[i] <- sd(sim_beta1[1:10,i])
+}
+paste0("Simulated Empirical Standard Deviation for Beta1 = ", mean(s_beta1s))
+
+# Empirical COnfidence Interval
+total <- 0
+upper <- rep(0, 1000)
+lower <- rep(0, 1000)
+for(i in 1:1000){
+  upper[i] <- means[i] + tval(.05/2, 8)*s_beta1s[i]
+  lower[i] <- means[i] - tval(.05/2, 8)*s_beta1s[i]
+  #if(3.2 <= upper[i] && 3.2 >= lower[i]){
+  #  total <- total + 1
+  #}
+}
+up_bound <- mean(upper)
+lw_bound <- mean(lower)
+ci <- paste0("(", lw_bound, ",", up_bound, ")")
+paste0("95% Confidence Interval from Simulation = ", ci)
+```
+
+
+### 2) Y
+```{r}
+# pick a fixed x = xstar and alpha level
+xstar <- 62
+alpha <- .05
+# Expected Value
+theoretical_expected_y <- beta_0 + beta_1*xstar
+paste0("Theoretical Expected Value for Y at xstar = 62: ", theoretical_expected_y)
+
+# Standard Deviation
+theoretical_s_y <- s_y(x_true, sig, xstar)
+paste0("Theoretical Standard Deviation for Y at xstar = 62: ", theoretical_s_y)
+
+# Confidence Interval
+n <- length(x_true)
+lower_bound <- theoretical_expected_y - tval(alpha/2, n-2)*theoretical_s_y
+upper_bound <- theoretical_expected_y + tval(alpha/2, n-2)*theoretical_s_y
+ci <- paste0("(", lower_bound, ",", upper_bound, ")")
+paste0("Theoretical 95% Confidence Interval for Y at xstar = 62: ", ci)
+
+```
+
+```{r}
+# Simulation for values
+# calculate experimental vector for Y
+sim_y <- data.frame(10, 1000)
+# choose to do 1000 repetitions for experiment of 10 observations each
+for(j in 1:1000){
+  sim_y[1:10,j] <- rnorm(10, theoretical_expected_y, theoretical_s_y)
+}
+
+# Empirical Expected Value for Y
+means <- rep(0, 1000)
+for(i in 1:1000){
+  means[i] <- mean(sim_y[1:10,i])
+}
+
+paste0("Simulated Empirical Expected Value for Y at xstar = 62: ", mean(means))
+
+# Empirical Standard Deviation for Y
+s_ys <- rep(0, 1000)
+for(i in 1:1000){
+  s_ys[i] <- sd(sim_y[1:10,i])
+}
+
+paste0("Simulated Empirical Standard Deviation for Y at xstar = 62: ", mean(s_ys))
+
+# Empirical COnfidence Interval
+total <- 0
+for(i in 1:1000){
+  upper[i] <- means[i] + tval(.05/2, 8)*s_ys[i]
+  lower[i] <- means[i] - tval(.05/2, 8)*s_ys[i]
+}
+up_bound <- mean(upper)
+lw_bound <- mean(lower)
+ci <- paste0("(", lw_bound, ",", up_bound, ")")
+paste0("95% Confidence Interval from Simulation = ", ci)
+```
+
+### 3) V
+```{r}
+# general function to find z values
+zval <- function(value){
+  a <- 1-(value)
+  zvalue <- qnorm(a, 0, 1)
+  return(zvalue)
+}
+```
+
+```{r}
+# Theoretical Values
+# pick an alpha and rho
+alpha <- .05
+rho <- .5
+# Expected Value
+expected_v <- .5*log((1+rho)/(1-rho))
+paste0("Theoretical expected value for v = ", expected_v)
+
+# Standard Deviation
+s_v <- sqrt(1/(length(x_true)-3))
+paste0("Theoretical standard deviation for v = ", s_v)
+
+# Confidence Interval
+upper <- expected_v + zval(alpha/2)*s_v
+lower <- expected_v - zval(alpha/2)*s_v
+ci <- paste0("(", lower, ",", upper, ")")
+paste0("Theoretical 95% confidence interval for v = ", ci)
+```
+
+```{r}
+# Simulation for values
+# calculate experimental vector for v
+sim_v <- data.frame(10, 1000)
+# choose to do 1000 repetitions for experiment of 10 observations each
+for(j in 1:1000){
+  sim_v[1:10,j] <- rnorm(10, expected_v, s_v)
+}
+
+# Empirical Expected Value for v
+means <- rep(0, 1000)
+for(i in 1:1000){
+  means[i] <- mean(sim_v[1:10,i])
+}
+
+paste0("Simulated Empirical Expected Value for v = ", mean(means))
+
+# Empirical Standard Deviation for v
+s_vs <- rep(0, 1000)
+for(i in 1:1000){
+  s_vs[i] <- sd(sim_v[1:10,i])
+}
+
+paste0("Simulated Empirical Standard Deviation for v = ", mean(s_vs))
+
+# Empirical COnfidence Interval
+total <- 0
+for(i in 1:1000){
+  upper[i] <- means[i] + zval(.05/2)*s_vs[i]
+  lower[i] <- means[i] - zval(.05/2)*s_vs[i]
+}
+up_bound <- mean(upper)
+lw_bound <- mean(lower)
+ci <- paste0("(", lw_bound, ",", up_bound, ")")
+paste0("95% Confidence Interval from Simulation = ", ci)
+```
+
+## 3) Analyzing the Iris Dataset
+### 1
+```{r}
+data(iris)
+```
+
+### 2
+```{r}
+head(iris)
+names(iris)
+summary(iris)
+```
+
+### 3
+```{r}
+# need to load dplyr from library to use filter function
+virginica <- filter(iris, Species == "virginica")
+setosa <- filter(iris, Species == "setosa")
+versicolor <- filter(iris, Species == "versicolor")
+```
+
+### 4
+```{r}
+# function to plot all the plots
+plots <- function(df){
+  paste0(plot(df$Sepal.Length, df$Sepal.Width, main = "Sepal Length Vs Sepal Width", xlab = "length", ylab = "width"),
+  plot(df$Sepal.Width, df$Sepal.Length, main = "Sepal Width Vs Sepal Length", xlab = "width", ylab = "length"),
+  plot(df$Sepal.Length, df$Petal.Length, main = "Sepal Length Vs Petal Length", xlab = "sepal", ylab = "petal"),
+  plot(df$Petal.Length, df$Sepal.Length, main = "Petal Length Vs Sepal Length", xlab = "petal", ylab = "sepal"),
+  plot(df$Sepal.Length, df$Petal.Width, main = "Sepal Length Vs Petal Width", xlab = "sepal length", ylab = "petal width"),
+  plot(df$Petal.Width, df$Sepal.Length, main = "Petal Width Vs Sepal Length", xlab = "petal width", ylab = "sepal length"),
+  plot(df$Sepal.Width, df$Petal.Length, main = "Sepal Width Vs Petal Length", xlab = "width", ylab = "length"),
+  plot(df$Petal.Length, df$Sepal.Width, main = "Petal Length Vs Sepal Width", xlab = "length", ylab = "width"),
+  
+  plot(df$Sepal.Width, df$Petal.Width, main = "Sepal Width Vs Petal Width", xlab = "sepal", ylab = "petal"),
+  plot(df$Petal.Width, df$Sepal.Width, main = "Petal Width Vs Sepal Width", xlab = "petal", ylab = "sepal"),
+  
+  plot(df$Petal.Length, df$Petal.Width, main = "Petal Length Vs Petal Width", xlab = "length", ylab = "width"),
+  plot(df$Petal.Width, df$Petal.Length, main = "Petal Width Vs Petal Length", xlab = "width", ylab = "length"))
+}
+```
+
+```{r}
+# function to find the correlation coefficients for each pair
+cor_coefs <- function(x, y){
+  r_i <- rep(0, length(x))
+  for(i in 1:12){
+    x_vector <- x[1:length(x),i]
+    y_vector <- y[1:length(y),i]
+    r_i[i] <- r(x_vector, y_vector)
+  }
+  print(
+    c(paste0("Correlation for Sepal Length and Width = ", r_i[1]),
+  writeLines("\n"),
+  paste0("Correlation for Sepal Width and Length = ", r_i[2]),
+  writeLines("\n"),
+  paste0("Correlation for Sepal Length and Petal Length = ", r_i[3]),
+  writeLines("\n"),
+  paste0("Correlation for Petal Length and Sepal Length = ", r_i[4]),
+  writeLines("\n"),
+  paste0("Correlation for Sepal Length and Petal Width = ", r_i[5]),
+  writeLines("\n"),
+  paste0("Correlation for Petal Width and Sepal Length = ", r_i[6]),
+  writeLines("\n"),
+  paste0("Correlation for Sepal Width and Petal Length = ", r_i[7]),
+  writeLines("\n"),
+  paste0("Correlation for Petal Length and Sepal Width = ", r_i[8]),
+  writeLines("\n"),
+  paste0("Correlation for Sepal Width and Petal Width = ", r_i[9]),
+  writeLines("\n"),
+  paste0("Correlation for Petal Width and Sepal Width = ", r_i[10]),
+  writeLines("\n"),
+  paste0("Correlation for Petal Length and Width = " , r_i[11]),
+  writeLines("\n"),
+  paste0("Correlation for Petal Width and Length = " , r_i[12]))
+  )
+}
+```
+
+```{r}
+# function to create the x vector for each data set
+x_dataframe <- function(df){
+  a <- data.frame(df$Sepal.Length, df$Sepal.Width, df$Sepal.Length, df$Petal.Length, df$Sepal.Length, df$Petal.Width,
+       df$Sepal.Width, df$Petal.Length, df$Sepal.Width, df$Petal.Width, df$Petal.Length, df$Petal.Width)
+  return(a)
+}
+```
+
+```{r}
+# function to create the y vector for each data set
+y_dataframe <- function(df){
+  a <- data.frame(df$Sepal.Width, df$Sepal.Length, df$Petal.Length, df$Sepal.Length, df$Petal.Width, df$Sepal.Length,
+       df$Petal.Length, df$Sepal.Width, df$Petal.Width, df$Sepal.Width, df$Petal.Width, df$Petal.Length)
+  return(a)
+}
+```
+
+```{r}
+# Function to give the values desired in part c
+values <- function(x, y){
+  # Model Parameters
+  fitted_beta1 <- beta1(x, y)
+  fitted_beta0 <- beta0(x, y, fitted_beta1)
+
+  # Line of Best Fit
+  y <- fitted_beta0 + fitted_beta1*x
+  # Coefficient of Determination
+  co_of_det <- r2(x, y)
+
+  # Standard Error for Slope Parameter
+  s_e <- s_beta1(x, sigma0(x, y))
+  
+  print(paste0("Model Parameter for beta1 = ", fitted_beta1))
+  print(paste0("Model Parameter for beta0 = ", fitted_beta0))
+  print(paste0("Line of Best Fit: y = ", fitted_beta0, " + ", fitted_beta1, "*x"))
+  print(paste0("Coefficient of Determination = ", co_of_det))
+  print(paste0("Standard Error of the Slope Parameter = ", s_e))
+}
+```
+
+
+#### versicolor
+##### a
+```{r}
+# I don't know where character(0) is printing from so just ignore that. It shouldn't be there.
+plots(versicolor)
+```
+
+##### b
+```{r}
+a <- x_dataframe(versicolor)
+b <- y_dataframe(versicolor)
+cor_coefs(a, b)
+```
+
+##### c
+
+```{r}
+# Pair 1
+# Petal Length Vs Sepal Length
+values(versicolor$Petal.Length, versicolor$Sepal.Length)
+
+# Pair 2
+# Sepal Width Vs Petal Width
+values(versicolor$Sepal.Width, versicolor$Petal.Width)
+
+# Pair 3
+# Sepal Width Vs Petal Length
+values(versicolor$Sepal.Width, versicolor$Petal.Length)
+```
+
+
+#### virginica
+##### a
+```{r}
+plots(virginica)
+```
+
+##### b
+```{r}
+a <- x_dataframe(virginica)
+b <- y_dataframe(virginica)
+cor_coefs(a, b)
+```
+
+##### c
+```{r}
+# Pair 1
+# Sepal Length Vs Petal Length
+values(virginica$Sepal.Length, virginica$Petal.Length)
+
+# Pair 2
+# Sepal Width Vs Petal Width
+values(virginica$Sepal.Width, virginica$Petal.Width)
+
+# Pair 3
+# Sepal Length Vs Sepal Width
+values(virginica$Sepal.Width, virginica$Petal.Length)
+```
+
+#### setosa
+##### a
+```{r}
+plots(setosa)
+```
+
+##### b
+```{r}
+a <- x_dataframe(setosa)
+b <- y_dataframe(setosa)
+cor_coefs(a, b)
+```
+
+##### c
+```{r}
+# Pair 1
+# Sepal Length Vs Sepal Width
+values(setosa$Sepal.Length, setosa$Sepal.Width)
+
+# Pair 2
+# Sepal Width Vs Petal Width
+values(setosa$Sepal.Width, setosa$Petal.Width)
+
+# Pair 3
+# Sepal Width Vs Petal Length
+values(setosa$Sepal.Width, setosa$Petal.Length)
+```
